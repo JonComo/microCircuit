@@ -5,16 +5,19 @@ import random
 class Region:
     def __init__(self, level=0, size=10):
         self.level = level
-        self.neurons = list()
         self.size = size
         self.neurons = [[neuron.Neuron(amplitude=0, position=(x,y,level)) for y in xrange(size)] for x in xrange(size)]
+        self.output_regions = []
 
     """Receive input in the form of array indices to active [0, 1] [100, 20] etc."""
     def input(self, indices):
         for index in indices:
             x = index[0]
             y = index[1]
-            self.neurons[x][y].amplitude = 1
+            self.neurons[x][y].input(1)
+
+    def output(self):
+        return [n.region_position() for n in self.active()]
 
     def active(self):
         return [n for column in self.neurons for n in column if n.amplitude == 1]
